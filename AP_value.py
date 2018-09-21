@@ -30,14 +30,13 @@ def get_n_words(s, is_clean=False):
         s = s.replace('@@ ','')
     return len(s.strip().split()), s 
     
-def draw_xy(pos, color, figPath, draw_k):
-    a = np.array(pos)
+def draw_xy(x, y, color, figPath, draw_k):
     #plt.scatter(a[:,0], a[:,1], c=y, s=40, cmap=plt.cm.Spectral)
     #  Set default x-axis tick labels on the top
     plt.rcParams['xtick.bottom'] = plt.rcParams['xtick.labelbottom'] = False
     plt.rcParams['xtick.top'] = plt.rcParams['xtick.labeltop'] = True
 
-    xy_max = max(max(a[:,1]), max(a[:,0]))+5
+    xy_max = max(max(y), max(x))+5
     #fig = plt.figure(figsize=(6,6)) 
     fig, ax = plt.subplots(figsize=(8,6))
     #ax[0].scatter(a[:,1], a[:,0], s=40, cmap=plt.cm.Spectral)
@@ -45,8 +44,9 @@ def draw_xy(pos, color, figPath, draw_k):
    
     ax.plot([1, xy_max], [1, xy_max],c='r')
 
-    sc = ax.scatter(a[:,1], a[:,0], c=color,
+    sc = ax.scatter(y, x, c=color,
                vmin=min(color), vmax=max(color), s=20, 
+               edgecolors='b',
                #cmap=plt.cm.get_cmap('RdYlBu'))
                cmap=plt.cm.get_cmap('cool'))
                #cmap='PuBu_r')
@@ -84,49 +84,52 @@ def display_instance(zh, en, is_clean, prop, waitk):
 
 
 out_dir = './output/'
-def AP_from_file(file_zh, file_en, is_clean=False, is_weight_ave=False):
+def AP_from_file(file_src, dir_tgt, is_clean=False, is_weight_ave=False):
+    title_base = '{}_area_clean{}_weight{}'.format(dir_tgt, str(is_clean)[0], str(is_weight_ave)[0])
     k_max = 10
     ave_wait = [[] for i in range(k_max)]
-    prop = [[] for i in range(k_max)]
+    prop = [[] for i in range(k_max)]   # k_max * count
     AP_list = []
-    length = []
+    len_ys = []
 
-    zh = open(file_zh, 'r').readlines()
-    en = open(file_en, 'r').readlines()
-    count = 0
-    for src, tgt in zip(zh, en):
-        count += 1
-        x = get_n_words(src, is_clean)[0]
-        y = get_n_words(tgt, is_clean)[0]
-        length.append([x,y])
-        for waitk in range(1, k_max+1):
+    
+    zh = open(file_src, 'r').readlines()
+    len_x = [get_n_words(x, is_clean)[0] for x in zh]
+    count = len(len_x)
+    for waitk in range(1, k_max+1):
+        en = open('{}/pred.w{}.unbpe.txt'.format(dir_tgt, waitk), 'r').readlines()
+        len_y = [get_n_words(y, is_clean)[0] for y in en]
+        len_ys.append(len_y)
+        for i, (x, y) in enumerate(zip(len_x, len_y)):
             s = calc_AP(x, y, waitk)[1]
             ave_wait[waitk-1].append(s)
-            prop[waitk-1].append(s/x/y)
-    
+            #if x < 1 or y < 1: print('{}/pred.w{}.unbpe.txt'.format(dir_tgt, waitk), waitk, x, y, i+1)
+            ratio = s/x/y if x > 0 and y > 0 else 0
+            prop[waitk-1].append(ratio)
 
-    title_base = 'proportion_clean{}_weight{}'.format(str(is_clean)[0], str(is_weight_ave)[0])
-    if is_weight_ave:
-        weights = [x[0]*x[1] for x in length]
-    else: 
-        weights = [1] * count
-    for waitk in range(1, k_max+1):
+    
+        if is_weight_ave:
+            weights = [x*y for x, y in zip(len_x, len_y)]
+        else: 
+            weights = [1] * count
+
         f = open(out_dir + title_base + '_wait{}.txt'.format(waitk), 'w')
         for i in range(count):
-            f.write('{} {} {} {}\n'.format(length[i][0], length[i][1], ave_wait[waitk-1][i], prop[waitk-1][i]))
+            f.write('{} {} {} {}\n'.format(len_x[i], len_y[i], ave_wait[waitk-1][i], prop[waitk-1][i]))
         f.close()
         total_weight = sum(weights) 
         AP = sum(p*w for p,w in zip(prop[waitk-1], weights)) / total_weight
         print('[{} lines] [clean_bpe_mark] {} [weighted_ave] {} [waitk] {} [AP] {:.5f} [range] {:.3f}..{:.3f}'.format(count, is_clean, is_weight_ave, waitk, AP, min(prop[waitk-1]), max(prop[waitk-1]))) 
         AP_list.append(AP)
 
-    for disp_k in range(1,11):
-        display_instance(zh, en, is_clean, prop, disp_k)
+    #for disp_k in range(1,11):
+    #    display_instance(zh, en, is_clean, prop, disp_k)
 
     
     #draw_k = 3 
-    for draw_k in range(1,6):
-        draw_xy(length, prop[draw_k-1], title_base, draw_k)
+    if is_weight_ave:
+        for draw_k in range(1,11):
+            draw_xy(len_x, len_ys[draw_k-1], prop[draw_k-1], title_base, draw_k)
     print()
     
     '''
@@ -147,9 +150,9 @@ def AP_from_file(file_zh, file_en, is_clean=False, is_weight_ave=False):
 
 
 
-def curvex2(f1, f2):
-    AP_list1, loerr, uperr, is_weight_ave, prop = AP_from_file(f1, f2, is_clean=False, is_weight_ave=False)
-    AP_list2, _, _, is_weight_ave, _ = AP_from_file(f1, f2, is_clean=False, is_weight_ave=True)
+def plot_all(src, tgt_dir):
+    AP_list1, loerr, uperr, is_weight_ave, prop = AP_from_file(src, tgt_dir, is_clean=False, is_weight_ave=False)
+    AP_list2, _, _, is_weight_ave, _ = AP_from_file(src, tgt_dir, is_clean=False, is_weight_ave=True)
 
     plt.rcParams['xtick.bottom'] = plt.rcParams['xtick.labelbottom'] = True
     plt.rcParams['xtick.top'] = plt.rcParams['xtick.labeltop'] = False
@@ -157,12 +160,12 @@ def curvex2(f1, f2):
     x = list(range(1,11))
     #ax.errorbar(x, AP_list1, yerr=[loerr, uperr],marker='s', ecolor='g', fmt='-o', label='mean')
     ax.plot(x, AP_list1, 's-',label='mean')
-    ax.plot(x, AP_list2, 'ro-',label='weighted_ave')
+    ax.plot(x, AP_list2, 'ro-',label='corpus_ave')
     ax.violinplot(prop, showmeans=True, showmedians=True)
     ax.set_xlabel('Wait_k')
     ax.set_ylabel('Average Proportion')
     ax.legend(loc='lower right')
-    fig.savefig(f2+'_corpus_AP.png')
+    fig.savefig(tgt_dir+'_corpus_AP.png')
    
 if __name__=="__main__":
     if len(sys.argv) == 3:
@@ -172,6 +175,6 @@ if __name__=="__main__":
         f1 = './testdata/test.txt'
         #f2 = 'dev_06.en.0.bpe' 
     f2 = 'waitk'
-    curvex2(f1, f2)
+    plot_all(f1, f2)
     f2 = 'catchup'
-    curvex2(f1, f2)
+    plot_all(f1, f2)
