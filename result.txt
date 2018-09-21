@@ -1,0 +1,44 @@
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 1 [AP] 0.61113 [range] 0.375..0.812
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 2 [AP] 0.64330 [range] 0.449..0.906
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 3 [AP] 0.67319 [range] 0.469..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 4 [AP] 0.70077 [range] 0.487..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 5 [AP] 0.72618 [range] 0.500..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 6 [AP] 0.74957 [range] 0.513..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 7 [AP] 0.77105 [range] 0.527..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 8 [AP] 0.79083 [range] 0.540..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 9 [AP] 0.80897 [range] 0.553..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] False [waitk] 10 [AP] 0.82558 [range] 0.567..1.000
+
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 1 [AP] 0.60809 [range] 0.389..0.814
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 2 [AP] 0.64447 [range] 0.457..0.893
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 3 [AP] 0.67799 [range] 0.479..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 4 [AP] 0.70856 [range] 0.500..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 5 [AP] 0.73631 [range] 0.521..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 6 [AP] 0.76163 [range] 0.538..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 7 [AP] 0.78454 [range] 0.554..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 8 [AP] 0.80532 [range] 0.569..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 9 [AP] 0.82414 [range] 0.584..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] False [waitk] 10 [AP] 0.84116 [range] 0.595..1.000
+
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 1 [AP] 0.60526 [range] 0.375..0.812
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 2 [AP] 0.62862 [range] 0.449..0.906
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 3 [AP] 0.65098 [range] 0.469..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 4 [AP] 0.67234 [range] 0.487..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 5 [AP] 0.69269 [range] 0.500..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 6 [AP] 0.71203 [range] 0.513..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 7 [AP] 0.73038 [range] 0.527..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 8 [AP] 0.74778 [range] 0.540..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 9 [AP] 0.76423 [range] 0.553..1.000
+[616 lines] [clean_bpe_mark] False [weighted_ave] True [waitk] 10 [AP] 0.77977 [range] 0.567..1.000
+
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 1 [AP] 0.60119 [range] 0.389..0.814
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 2 [AP] 0.62758 [range] 0.457..0.893
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 3 [AP] 0.65272 [range] 0.479..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 4 [AP] 0.67658 [range] 0.500..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 5 [AP] 0.69912 [range] 0.521..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 6 [AP] 0.72040 [range] 0.538..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 7 [AP] 0.74042 [range] 0.554..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 8 [AP] 0.75923 [range] 0.569..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 9 [AP] 0.77688 [range] 0.584..1.000
+[616 lines] [clean_bpe_mark] True [weighted_ave] True [waitk] 10 [AP] 0.79340 [range] 0.595..1.000
+

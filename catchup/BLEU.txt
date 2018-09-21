@@ -1,0 +1,66 @@
+unbpe finished for wait 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+4 refences
+wait_1  BLEU = 24.22, 59.7/32.0/17.6/10.2 (BP=1.000, ratio=1.135, hyp_len=27244, ref_len=23995)
+wait_2  BLEU = 27.14, 62.7/35.4/20.3/12.1 (BP=1.000, ratio=1.118, hyp_len=26748, ref_len=23933)
+wait_3  BLEU = 27.95, 64.0/36.2/21.0/12.6 (BP=1.000, ratio=1.111, hyp_len=26513, ref_len=23865)
+wait_4  BLEU = 30.00, 65.5/38.1/22.8/14.2 (BP=1.000, ratio=1.098, hyp_len=26063, ref_len=23743)
+wait_5  BLEU = 31.31, 67.3/40.1/24.0/14.8 (BP=1.000, ratio=1.084, hyp_len=25564, ref_len=23593)
+wait_6  BLEU = 32.87, 69.1/41.8/25.5/15.9 (BP=1.000, ratio=1.072, hyp_len=25025, ref_len=23345)
+wait_7  BLEU = 32.34, 68.8/41.3/25.0/15.4 (BP=1.000, ratio=1.075, hyp_len=25132, ref_len=23388)
+wait_8  BLEU = 35.24, 71.2/44.3/27.6/17.7 (BP=1.000, ratio=1.064, hyp_len=24614, ref_len=23133)
+wait_9  BLEU = 35.09, 70.9/44.1/27.5/17.6 (BP=1.000, ratio=1.075, hyp_len=25160, ref_len=23414)
+wait_10  BLEU = 36.35, 72.0/45.6/28.9/18.4 (BP=1.000, ratio=1.070, hyp_len=24926, ref_len=23306)
+ 
+refence 0
+wait_1  BLEU = 13.89, 42.9/18.4/9.3/5.1 (BP=1.000, ratio=1.205, hyp_len=27244, ref_len=22601)
+wait_2  BLEU = 15.49, 45.2/20.1/10.6/6.0 (BP=1.000, ratio=1.183, hyp_len=26748, ref_len=22601)
+wait_3  BLEU = 15.86, 46.4/20.6/10.8/6.1 (BP=1.000, ratio=1.173, hyp_len=26513, ref_len=22601)
+wait_4  BLEU = 16.82, 47.5/21.7/11.5/6.7 (BP=1.000, ratio=1.153, hyp_len=26063, ref_len=22601)
+wait_5  BLEU = 17.56, 48.8/22.8/12.1/7.0 (BP=1.000, ratio=1.131, hyp_len=25564, ref_len=22601)
+wait_6  BLEU = 18.46, 50.5/23.8/12.8/7.5 (BP=1.000, ratio=1.107, hyp_len=25025, ref_len=22601)
+wait_7  BLEU = 18.50, 50.1/23.8/12.9/7.6 (BP=1.000, ratio=1.112, hyp_len=25132, ref_len=22601)
+wait_8  BLEU = 20.30, 52.3/25.8/14.5/8.7 (BP=1.000, ratio=1.089, hyp_len=24614, ref_len=22601)
+wait_9  BLEU = 19.38, 51.5/25.0/13.6/8.1 (BP=1.000, ratio=1.113, hyp_len=25160, ref_len=22601)
+wait_10  BLEU = 20.24, 52.5/25.8/14.4/8.6 (BP=1.000, ratio=1.103, hyp_len=24926, ref_len=22601)
+refence 1
+wait_1  BLEU = 13.61, 44.1/18.3/8.8/4.8 (BP=1.000, ratio=1.127, hyp_len=27244, ref_len=24169)
+wait_2  BLEU = 15.31, 46.8/20.4/10.2/5.6 (BP=1.000, ratio=1.107, hyp_len=26748, ref_len=24169)
+wait_3  BLEU = 15.01, 47.4/20.2/10.0/5.3 (BP=1.000, ratio=1.097, hyp_len=26513, ref_len=24169)
+wait_4  BLEU = 15.73, 48.4/21.0/10.5/5.7 (BP=1.000, ratio=1.078, hyp_len=26063, ref_len=24169)
+wait_5  BLEU = 16.76, 50.2/22.5/11.4/6.2 (BP=1.000, ratio=1.058, hyp_len=25564, ref_len=24169)
+wait_6  BLEU = 17.16, 51.5/22.9/11.7/6.3 (BP=1.000, ratio=1.035, hyp_len=25025, ref_len=24169)
+wait_7  BLEU = 16.87, 50.9/22.6/11.5/6.1 (BP=1.000, ratio=1.040, hyp_len=25132, ref_len=24169)
+wait_8  BLEU = 18.80, 53.3/24.8/13.0/7.3 (BP=1.000, ratio=1.018, hyp_len=24614, ref_len=24169)
+wait_9  BLEU = 18.65, 52.9/24.5/12.9/7.2 (BP=1.000, ratio=1.041, hyp_len=25160, ref_len=24169)
+wait_10  BLEU = 19.18, 53.8/25.3/13.3/7.5 (BP=1.000, ratio=1.031, hyp_len=24926, ref_len=24169)
+refence 2
+wait_1  BLEU = 12.17, 41.5/16.4/7.9/4.1 (BP=1.000, ratio=1.215, hyp_len=27244, ref_len=22421)
+wait_2  BLEU = 13.48, 43.5/18.1/8.9/4.7 (BP=1.000, ratio=1.193, hyp_len=26748, ref_len=22421)
+wait_3  BLEU = 14.19, 44.6/18.8/9.4/5.1 (BP=1.000, ratio=1.183, hyp_len=26513, ref_len=22421)
+wait_4  BLEU = 15.42, 45.8/20.1/10.5/5.9 (BP=1.000, ratio=1.162, hyp_len=26063, ref_len=22421)
+wait_5  BLEU = 15.32, 47.1/20.4/10.3/5.6 (BP=1.000, ratio=1.140, hyp_len=25564, ref_len=22421)
+wait_6  BLEU = 16.70, 48.5/21.7/11.4/6.5 (BP=1.000, ratio=1.116, hyp_len=25025, ref_len=22421)
+wait_7  BLEU = 16.31, 48.0/21.2/11.1/6.3 (BP=1.000, ratio=1.121, hyp_len=25132, ref_len=22421)
+wait_8  BLEU = 18.02, 49.9/23.1/12.5/7.3 (BP=1.000, ratio=1.098, hyp_len=24614, ref_len=22421)
+wait_9  BLEU = 17.73, 49.5/23.0/12.3/7.0 (BP=1.000, ratio=1.122, hyp_len=25160, ref_len=22421)
+wait_10  BLEU = 18.49, 50.7/23.7/13.0/7.5 (BP=1.000, ratio=1.112, hyp_len=24926, ref_len=22421)
+refence 3
+wait_1  BLEU = 10.89, 42.2/15.6/6.6/3.2 (BP=1.000, ratio=1.157, hyp_len=27244, ref_len=23554)
+wait_2  BLEU = 12.61, 44.2/17.6/8.0/4.1 (BP=1.000, ratio=1.136, hyp_len=26748, ref_len=23554)
+wait_3  BLEU = 12.70, 44.9/17.6/8.0/4.1 (BP=1.000, ratio=1.126, hyp_len=26513, ref_len=23554)
+wait_4  BLEU = 13.70, 46.3/18.6/8.7/4.7 (BP=1.000, ratio=1.107, hyp_len=26063, ref_len=23554)
+wait_5  BLEU = 14.90, 47.8/20.2/9.7/5.3 (BP=1.000, ratio=1.085, hyp_len=25564, ref_len=23554)
+wait_6  BLEU = 15.09, 48.8/20.6/9.8/5.3 (BP=1.000, ratio=1.062, hyp_len=25025, ref_len=23554)
+wait_7  BLEU = 14.97, 49.0/20.3/9.8/5.2 (BP=1.000, ratio=1.067, hyp_len=25132, ref_len=23554)
+wait_8  BLEU = 15.74, 50.2/21.3/10.3/5.6 (BP=1.000, ratio=1.045, hyp_len=24614, ref_len=23554)
+wait_9  BLEU = 15.81, 50.0/21.4/10.4/5.6 (BP=1.000, ratio=1.068, hyp_len=25160, ref_len=23554)
+wait_10  BLEU = 16.64, 50.7/22.2/11.1/6.1 (BP=1.000, ratio=1.058, hyp_len=24926, ref_len=23554)
