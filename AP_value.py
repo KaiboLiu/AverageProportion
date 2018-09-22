@@ -7,6 +7,7 @@ tgt=./catchup/pred.w<i>.unbpe.txt, from /mnt/scratch/kaibo/proj/fordecoding_catc
 tgt=./waitk/pred.w<i>.unbpe.txt, from /mnt/scratch/kaibo/proj/fordecoding/decode_result/pred.w<i>.unbpe.txt (decoded sentences 616 lines)
 '''
 import sys
+import os
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import numpy as np
@@ -24,6 +25,11 @@ def calc_AP(x,y,waitk):
     a = [i if i < x else x for i in range(waitk, waitk+y)]
     return a, sum(a)
     #return sum(i if i < x else x for i in range(waitk, waitk+y)) 
+
+
+# diagonal of x, y
+def calc_AL_wait(x,y,waitk):
+    return y*(waitk-1)+y*waitk*(waitk-1)/2/x
 
 def get_n_words(s, is_clean=False):
     if is_clean:
@@ -66,7 +72,7 @@ def draw_xy(x, y, color, figPath, draw_k):
     ax.set_ylabel('source length |X|')
     plt.gca().invert_yaxis()   # put origin at top
     #plt.show()
-    fig.savefig('{}_wait{}.png'.format(figPath, draw_k))
+    fig.savefig('{}_wait{}.pdf'.format(figPath, draw_k))
     
 
 def display_instance(zh, en, is_clean, prop, waitk):
@@ -84,32 +90,33 @@ def display_instance(zh, en, is_clean, prop, waitk):
 
 
 out_dir = './output/'
-def AP_from_file(file_src, dir_tgt, is_clean=False, is_weight_ave=False):
-    title_base = '{}_area_clean{}_weight{}'.format(dir_tgt, str(is_clean)[0], str(is_weight_ave)[0])
+def AP_from_file(file_src, dir_tgt, type_dataset, type_bpe, is_clean=False, is_weight_ave=False):
+    title_base = '{}_scatter_{}_{}'.format(dir_tgt, type_dataset, type_bpe)
     k_max = 10
     ave_wait = [[] for i in range(k_max)]
     prop = [[] for i in range(k_max)]   # k_max * count
     AP_list = []
     len_ys = []
-
     
     zh = open(file_src, 'r').readlines()
     len_x = [get_n_words(x, is_clean)[0] for x in zh]
     count = len(len_x)
     for waitk in range(1, k_max+1):
-        en = open('{}/pred.w{}.unbpe.txt'.format(dir_tgt, waitk), 'r').readlines()
+        en = open('{}/{}_pred.w{}.{}.txt'.format(dir_tgt, type_dataset, waitk, type_bpe), 'r').readlines()
         len_y = [get_n_words(y, is_clean)[0] for y in en]
         len_ys.append(len_y)
         for i, (x, y) in enumerate(zip(len_x, len_y)):
             s = calc_AP(x, y, waitk)[1]
+            #s = calc_AL_wait(x, y, waitk)
             ave_wait[waitk-1].append(s)
-            #if x < 1 or y < 1: print('{}/pred.w{}.unbpe.txt'.format(dir_tgt, waitk), waitk, x, y, i+1)
+            if x < 1 or y < 1: print('{}/{}_pred.w{}.{}.txt'.format(dir_tgt, type_dataset, waitk, type_bpe), waitk, x, y, i+1)
             ratio = s/x/y if x > 0 and y > 0 else 0
+            #ratio = s/y if y > 0 else 0
             prop[waitk-1].append(ratio)
-
     
         if is_weight_ave:
-            weights = [x*y for x, y in zip(len_x, len_y)]
+            #weights = [x*y for x, y in zip(len_x, len_y)]
+            weights = [y for y in len_y]
         else: 
             weights = [1] * count
 
@@ -119,7 +126,7 @@ def AP_from_file(file_src, dir_tgt, is_clean=False, is_weight_ave=False):
         f.close()
         total_weight = sum(weights) 
         AP = sum(p*w for p,w in zip(prop[waitk-1], weights)) / total_weight
-        print('[{} lines] [clean_bpe_mark] {} [weighted_ave] {} [waitk] {} [AP] {:.5f} [range] {:.3f}..{:.3f}'.format(count, is_clean, is_weight_ave, waitk, AP, min(prop[waitk-1]), max(prop[waitk-1]))) 
+        print('[{} lines] [{}] [weighted_ave] {} [waitk] {} [AP] {:.5f} [range] {:.3f}..{:.3f}'.format(count, type_bpe, is_weight_ave, waitk, AP, min(prop[waitk-1]), max(prop[waitk-1]))) 
         AP_list.append(AP)
 
     #for disp_k in range(1,11):
@@ -127,7 +134,7 @@ def AP_from_file(file_src, dir_tgt, is_clean=False, is_weight_ave=False):
 
     
     #draw_k = 3 
-    if is_weight_ave:
+    if is_weight_ave and type_dataset == 'dev':
         for draw_k in range(1,11):
             draw_xy(len_x, len_ys[draw_k-1], prop[draw_k-1], title_base, draw_k)
     print()
@@ -142,7 +149,7 @@ def AP_from_file(file_src, dir_tgt, is_clean=False, is_weight_ave=False):
     ax2.errorbar(x, AP_list, yerr=[loerr, uperr],marker='s', ecolor='g', fmt='-o')
     ax2.set_xlabel('Wait_k')
     ax2.set_ylabel('Average Proportion')
-    fig2.savefig('corpus_{}.png'.format(title_base))
+    fig2.savefig('corpus_{}.pdf'.format(title_base))
     '''
     loerr = [b-min(a) for a,b in zip(prop,AP_list)]
     uperr = [max(a)-b for a,b in zip(prop,AP_list)]
@@ -150,9 +157,9 @@ def AP_from_file(file_src, dir_tgt, is_clean=False, is_weight_ave=False):
 
 
 
-def plot_all(src, tgt_dir):
-    AP_list1, loerr, uperr, is_weight_ave, prop = AP_from_file(src, tgt_dir, is_clean=False, is_weight_ave=False)
-    AP_list2, _, _, is_weight_ave, _ = AP_from_file(src, tgt_dir, is_clean=False, is_weight_ave=True)
+def plot_all(src, tgt_dir, type_dataset, type_bpe):
+    AP_list1, loerr, uperr, is_weight_ave, prop = AP_from_file(src, tgt_dir, type_dataset, type_bpe, is_clean=False, is_weight_ave=False)
+    AP_list2, _, _, is_weight_ave, _ = AP_from_file(src, tgt_dir, type_dataset, type_bpe, is_clean=False, is_weight_ave=True)
 
     plt.rcParams['xtick.bottom'] = plt.rcParams['xtick.labelbottom'] = True
     plt.rcParams['xtick.top'] = plt.rcParams['xtick.labeltop'] = False
@@ -165,16 +172,23 @@ def plot_all(src, tgt_dir):
     ax.set_xlabel('Wait_k')
     ax.set_ylabel('Average Proportion')
     ax.legend(loc='lower right')
-    fig.savefig(tgt_dir+'_corpus_AP.png')
+    fig.savefig('{}_{}_{}_AP.pdf'.format(tgt_dir, type_dataset, type_bpe))
    
 if __name__=="__main__":
     if len(sys.argv) == 3:
-        f1 = sys.argv[1]
-        #f2 = sys.argv[2]
+        type_dataset = sys.argv[1]
+        type_bpe = sys.argv[2]
     else:
-        f1 = './testdata/test.txt'
-        #f2 = 'dev_06.en.0.bpe' 
-    f2 = 'waitk'
-    plot_all(f1, f2)
-    f2 = 'catchup'
-    plot_all(f1, f2)
+        type_dataset = 'dev'
+        type_bpe = 'bpe'
+
+    os.system("cp ./testdata/test_src.text ./testdata/test_src")
+    os.system("cp ./testdata/dev_06.zh ./testdata/dev_src")
+    os.system("cp ./testdata/dev_06.zh.bpe ./testdata/dev_src.bpe")
+
+    src = './testdata/{}_src'.format(type_dataset)
+    if type_bpe == 'bpe': src += '.bpe'
+    tgt_dir = 'waitk'
+    plot_all(src, tgt_dir, type_dataset, type_bpe)
+    tgt_dir = 'catchup'
+    plot_all(src, tgt_dir, type_dataset, type_bpe)
