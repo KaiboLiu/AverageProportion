@@ -183,6 +183,10 @@ def plot_all(src, tgt_dir, type_dataset, type_bpe):
     ax.set_ylabel('Average Proportion')
     ax.legend(loc='lower right')
     fig.savefig('{}_{}_{}_AP.pdf'.format(tgt_dir, type_dataset, type_bpe))
+    f = open('{}_{}_AP.txt'.format(tgt_dir, type_dataset), 'w')
+    print('{}_{}_AP.txt'.format(tgt_dir, type_dataset))
+    f.write('mean\n{}\ncorpus\n{}\n'.format(' '.join(map(str,AP_list1)), ' '.join(map(str,AP_list2))))
+    f.close
    
 if __name__=="__main__":
     if len(sys.argv) == 3:
