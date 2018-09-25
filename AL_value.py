@@ -105,7 +105,7 @@ def display_instance(zh, en, is_clean, prop, waitk):
 
 out_dir = './output/'
 def AL_from_file(src_file, tgt_dir, type_dataset, type_bpe, is_clean=False, is_weight_ave=False):
-    title_base = '{}_scatter_{}_{}'.format(tgt_dir, type_dataset, type_bpe)
+    title_base = '{}_scatter_{}_{}_AL'.format(tgt_dir, type_dataset, type_bpe)
     k_max = 10
     ave_wait = [[] for i in range(k_max)]
     prop = [[] for i in range(k_max)]   # k_max * count

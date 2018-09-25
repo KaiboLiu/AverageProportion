@@ -27,9 +27,18 @@ def calc_AP(x,y,waitk):
     #return sum(i if i < x else x for i in range(waitk, waitk+y)) 
 
 
-# diagonal of x, y
-def calc_AL_wait(x,y,waitk):
-    return y*(waitk-1)+y*waitk*(waitk-1)/2/x
+# diagonal of catchup 1112
+def calc_AP_catchup(x,y,waitk):
+    if y == 0: return 0
+    if waitk > x: return x*y
+    inc = [1,1,1,1,0]
+    start = 1
+    curr = [waitk]
+    for i in range(1, y):
+        newval = curr[-1]+inc[i % 5] if curr[-1] < x else x
+        curr.append(newval)
+    return sum(curr)
+
 
 def get_n_words(s, is_clean=False):
     if is_clean:
@@ -91,7 +100,7 @@ def display_instance(zh, en, is_clean, prop, waitk):
 
 out_dir = './output/'
 def AP_from_file(file_src, dir_tgt, type_dataset, type_bpe, is_clean=False, is_weight_ave=False):
-    title_base = '{}_scatter_{}_{}'.format(dir_tgt, type_dataset, type_bpe)
+    title_base = '{}_scatter_{}_{}_AP'.format(dir_tgt, type_dataset, type_bpe)
     k_max = 10
     ave_wait = [[] for i in range(k_max)]
     prop = [[] for i in range(k_max)]   # k_max * count
@@ -106,7 +115,8 @@ def AP_from_file(file_src, dir_tgt, type_dataset, type_bpe, is_clean=False, is_w
         len_y = [get_n_words(y, is_clean)[0] for y in en]
         len_ys.append(len_y)
         for i, (x, y) in enumerate(zip(len_x, len_y)):
-            s = calc_AP(x, y, waitk)[1]
+            #s = calc_AP(x, y, waitk)[1]
+            s = calc_AP(x, y, waitk)[1] if tgt_dir == 'waitk' else calc_AP_catchup(x, y, waitk)
             #s = calc_AL_wait(x, y, waitk)
             ave_wait[waitk-1].append(s)
             if x < 1 or y < 1: print('{}/{}_pred.w{}.{}.txt'.format(dir_tgt, type_dataset, waitk, type_bpe), waitk, x, y, i+1)
