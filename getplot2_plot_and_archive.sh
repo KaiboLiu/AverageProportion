@@ -3,13 +3,13 @@ mv result_catchup result_catchup_back
 mkdir result_waitk
 mkdir result_catchup
 python AP_value.py dev bpe
-python AP_value.py dev unbpe
+#python AP_value.py dev unbpe
 python AP_value.py test bpe
-python AP_value.py test unbpe
+#python AP_value.py test unbpe
 python AL_value.py dev bpe
-python AL_value.py dev unbpe
+#python AL_value.py dev unbpe
 python AL_value.py test bpe
-python AL_value.py test unbpe
+#python AL_value.py test unbpe
 
 mv wait*.pdf result_waitk
 mv catchup*.pdf result_catchup
