@@ -19,6 +19,7 @@ def get_data(type_ref, type_dataset):
     pattern = 'BLEU = ([^,]+),'
     line = open('BLEU.md','r').readlines()[lineNum]
     bleu_base = round(float(re.findall(pattern, line)[0]), 2)
+    bleu_base_rnn = 31.94
     lineNum = 1 # 1 if mean, 3 if corpus ave
 
     wait_AP = list(map(float, open('waitk_{}_AP.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
@@ -33,27 +34,44 @@ def get_data(type_ref, type_dataset):
     cat_bleu = [float(re.findall(pattern, line)[0]) for line in open(file_bleu_cat,'r').readlines()[startLine: startLine+10]] 
     
     x = range(1,11)
+    ylabel = '4-ref BLEU' if type_ref =='4refs' else '1-ref BLEU'
+
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')   # to use math style font
+
+    plt.rcParams['font.size'] = 18   # global font size
+    #plt.gcf().subplots_adjust(bottom=0.5)
+    #plt.rcParams.update({'figure.autolayout': True})
 
     fig,ax = plt.subplots()
-    ax.plot(wait_AP, wait_bleu, 's-', label='waitk'+'_'+type_ref+'_'+type_dataset)
-    ax.plot(cat_AP, cat_bleu, 'o-', label='catchup'+'_'+type_ref+'_'+type_dataset)
-    ax.hlines(bleu_base, ax.axis()[0], ax.axis()[1], 'r', linestyles='dashed', label=    'baseline')
-    #ax.plot(range(0,1,10),[bleu_base]*10, '--', label='baseline'+'_'+type_ref+'_'+type_dataset)
+    ax.margins(0.1)           # Default margin is 0.05, value 0 means fit
+    #ax.plot(wait_AP, wait_bleu, 's-', label='waitk')#+'_'+type_ref+'_'+type_dataset)
+    ax.plot(wait_AP, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
+    ax.plot(cat_AP, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
+    
+    offset_rate = 1.25 if type_ref =='4refs' else 0.85
+    for i in range(10):
+        ax.annotate('k={}'.format(i+1), xy=(wait_AP[i]-0.04*offset_rate ,wait_bleu[i]+1.1*offset_rate), color='C0', rotation=-45, fontsize=15)
+        if i > 0: ax.annotate('k={}'.format(i+1), xy=(cat_AP[i],cat_bleu[i]-0.7*offset_rate), color='C1', rotation=-45,fontsize=15)
+    ax.annotate('k=1', xy=(cat_AP[0]-0.035*offset_rate,cat_bleu[0]+1.2*offset_rate), color='C1', rotation=-45,fontsize=15)
+    #ax.hlines(bleu_base, ax.axis()[0], ax.axis()[1], 'r', linestyles='dashed', label=    'baseline')
+    ax.scatter(1, bleu_base, c='r', marker='*', label='baseline') 
     ax.set_xlabel('Average Proportion')
-    ax.set_ylabel('BLEU')
+    ax.set_ylabel(ylabel)
     ax.legend(loc='lower right')
+    plt.tight_layout()  # make room for the xlabel
     fig.savefig('bleu_AP_{}_{}.pdf'.format(type_dataset, type_ref))
 
     fig2,ax2 = plt.subplots()
-    ax2.plot(x, wait_bleu, 's-', label='waitk'+'_'+type_ref+'_'+type_dataset)
-    ax2.plot(x, cat_bleu, 'o-', label='catchup'+'_'+type_ref+'_'+type_dataset)
+    ax2.plot(x, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset) 
+    ax2.plot(x, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
     ax2.hlines(bleu_base, ax2.axis()[0], ax2.axis()[1], 'r', linestyles='dashed', label='baseline')
     #ax2.plot(x, [bleu_base]*10, '--', label='baseline'+'_'+type_ref+'_'+type_dataset)
-    ax2.set_xlabel('wait_k')
-    ax2.set_ylabel('BLEU')
+    ax2.set_xlabel(r'$k$')
+    ax2.set_ylabel(ylabel)
     ax2.legend(loc='lower right')
+    plt.tight_layout()  # make room for the xlabel
     fig2.savefig('bleu_waitk_{}_{}.pdf'.format(type_dataset, type_ref))
-
 
 
 # diagonal of catchup 1112
