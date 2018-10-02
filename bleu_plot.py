@@ -24,9 +24,13 @@ def get_data(type_ref, type_dataset):
 
     wait_AP = list(map(float, open('waitk_{}_AP.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
     cat_AP = list(map(float, open('catchup_{}_AP.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
+    wait_AL = list(map(float, open('waitk_{}_AL.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
+    cat_AL = list(map(float, open('catchup_{}_AL.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
+
     startLine = 0
     if type_dataset == 'dev':
         startLine = 4 if type_ref =='4refs' else 38
+        #startLine = 110 if type_ref =='4refs' else 144 
     else: 
         startLine = 110 if type_ref =='4refs' else 144
 
@@ -61,6 +65,26 @@ def get_data(type_ref, type_dataset):
     ax.legend(loc='lower right')
     plt.tight_layout()  # make room for the xlabel
     fig.savefig('bleu_AP_{}_{}.pdf'.format(type_dataset, type_ref))
+
+
+    fig0,ax0 = plt.subplots()
+    ax0.margins(0.1)           # Default margin is 0.05, value 0 means fit
+    #ax0.plot(wait_AL, wait_bleu, 's-', label='waitk')#+'_'+type_ref+'_'+type_dataset)
+    ax0.plot(wait_AL, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
+    ax0.plot(cat_AL, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
+    
+    for i in range(10):
+        ax0.annotate('k={}'.format(i+1), xy=(wait_AL[i]-0.04*offset_rate ,wait_bleu[i]+1.1*offset_rate), color='C0', rotation=-45, fontsize=15)
+        if i > 0: ax0.annotate('k={}'.format(i+1), xy=(cat_AL[i],cat_bleu[i]-0.7*offset_rate), color='C1', rotation=-45,fontsize=15)
+    ax0.annotate('k=1', xy=(cat_AL[0]-0.035*offset_rate,cat_bleu[0]+1.2*offset_rate), color='C1', rotation=-45,fontsize=15)
+    #ax0.hlines(bleu_base, ax0.axis()[0], ax0.axis()[1], 'r', linestyles='dashed', label=    'baseline')
+    ax0.scatter(15, bleu_base, c='r', marker='*', label='baseline') 
+    ax0.set_xlabel('Average Lagging')
+    ax0.set_ylabel(ylabel)
+    ax0.legend(loc='lower right')
+    plt.tight_layout()  # make room for the xlabel
+    fig0.savefig('bleu_AL_{}_{}.pdf'.format(type_dataset, type_ref))
+
 
     fig2,ax2 = plt.subplots()
     ax2.plot(x, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset) 

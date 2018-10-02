@@ -1,5 +1,6 @@
 mv result_waitk result_waitk_back
 mv result_catchup result_catchup_back
+rm -fr result_waitk result_catchup
 mkdir result_waitk
 mkdir result_catchup
 python AP_value.py dev bpe

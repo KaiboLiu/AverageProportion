@@ -28,10 +28,21 @@ def calc_AP(x,y,waitk):
 
 
 # diagonal of x, y
+'''
 def calc_AL_waitk(x,y,waitk):
     return y*(waitk-1)+y*waitk*(waitk-1)/2/x
+'''
+def calc_AL_waitk(x, y, k):
+    if y == 0: return 0
+    #y1 = min(max(x-k+1, 1), y)
+    #a = list(range(k, k+y1))
+    curr = list(range(k, x+1))[:y] if x >=k else [x]
+    y1 = len(curr)
+    s = sum(curr) - x*y/2*(y1/y)**2
+    return s/y1
 
 # diagonal of catchup 1112 
+'''
 def calc_AL_catchup(x,y,waitk):
     if y == 0: return 0
 
@@ -44,6 +55,21 @@ def calc_AL_catchup(x,y,waitk):
         newval = curr[-1]+inc[i % 5] if curr[-1] < x else x 
         curr.append(newval)
     return sum(b-a for a,b in zip(base, curr))
+'''
+def calc_AL_catchup(x,y,k):
+    if y == 0: return 0
+
+    inc = [1,1,1,1,0]
+    start = 1
+    curr = [k] if x >=k else [x]
+    for i in range(1, y): 
+        if curr[-1] == x: break
+        newval = curr[-1]+inc[i % 5]
+        curr.append(newval)
+    y1 = len(curr)
+    s = sum(curr) - x*y/2*(y1/y)**2
+    return s/y1
+
 
 def get_n_words(s, is_clean=False):
     if is_clean:
@@ -123,14 +149,16 @@ def AL_from_file(src_file, tgt_dir, type_dataset, type_bpe, is_clean=False, is_w
             #s = calc_AP(x, y, waitk)[1]
             s = calc_AL_waitk(x, y, waitk) if tgt_dir == 'waitk' else calc_AL_catchup(x, y, waitk)
             ave_wait[waitk-1].append(s)
-            if x < 1 or y < 1: print('{}/{}_pred.w{}.{}.txt'.format(tgt_dir, type_dataset, waitk, type_bpe), waitk, x, y, i+1)
+            #if s < -18 or x < 1 or y < 1: print('{}/{}_pred.w{}.{}.txt'.format(tgt_dir, type_dataset, waitk, type_bpe), waitk, x, y, i+1, s)
             #ratio = s/x/y if x > 0 and y > 0 else 0
-            ratio = s/y if y > 0 else 0
+            #ratio = s/y if y > 0 else 0
+            ratio = s
             prop[waitk-1].append(ratio)
     
         if is_weight_ave:
             #weights = [x*y for x, y in zip(len_x, len_y)]
-            weights = [y for y in len_y]
+            #weights = [y for y in len_y]
+            weights = len_x
         else: 
             weights = [1] * count
 
@@ -187,6 +215,11 @@ def plot_all(src, tgt_dir, type_dataset, type_bpe):
     ax.set_ylabel('Average Lagging')
     ax.legend(loc='upper left')
     fig.savefig('{}_{}_{}_AL.pdf'.format(tgt_dir, type_dataset, type_bpe))   
+
+    f = open('{}_{}_AL.txt'.format(tgt_dir, type_dataset), 'w')
+    print('{}_{}_AL.txt'.format(tgt_dir, type_dataset))
+    f.write('mean\n{}\ncorpus\n{}\n'.format(' '.join(map(str,AL_list1)), ' '.join(map(str,AL_list2))))
+    f.close
 if __name__=="__main__":
     if len(sys.argv) == 3:
         type_dataset = sys.argv[1]

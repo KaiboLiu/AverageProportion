@@ -1,0 +1,10 @@
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait1/w1_step_71000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait2/w2_step_62000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait3/w3_step_73000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait4/w4_step_79000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait5/w5_step_84000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait6/w6_step_61000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait7/w7_step_56000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait8/w8_step_90000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait9/w9_step_78000.pt
+/mnt/home/kaibo/proj/opennmt_v726_catchup/secondrun/wait10/w10_step_86000.pt
