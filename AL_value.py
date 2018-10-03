@@ -38,7 +38,10 @@ def calc_AL_waitk(x, y, k):
     #a = list(range(k, k+y1))
     curr = list(range(k, x+1))[:y] if x >=k else [x]
     y1 = len(curr)
-    s = sum(curr) - x*y/2*(y1/y)**2
+    ## continous diagnal
+    #s = sum(curr) - x*y/2*(y1/y)**2
+    ## step diagnal
+    s = sum(curr) - x*y/2*(y1/y)**2 + y1*x/y/2
     return s/y1
 
 # diagonal of catchup 1112 
@@ -67,7 +70,10 @@ def calc_AL_catchup(x,y,k):
         newval = curr[-1]+inc[i % 5]
         curr.append(newval)
     y1 = len(curr)
-    s = sum(curr) - x*y/2*(y1/y)**2
+    ## continous diagnal
+    #s = sum(curr) - x*y/2*(y1/y)**2
+    ## step diagnal
+    s = sum(curr) - x*y/2*(y1/y)**2 + y1*x/y/2
     return s/y1
 
 

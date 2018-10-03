@@ -47,13 +47,14 @@ def get_data(type_ref, type_dataset):
     #plt.gcf().subplots_adjust(bottom=0.5)
     #plt.rcParams.update({'figure.autolayout': True})
 
+    ############ plot BLEU-AP figs #############
     fig,ax = plt.subplots()
     ax.margins(0.1)           # Default margin is 0.05, value 0 means fit
     #ax.plot(wait_AP, wait_bleu, 's-', label='waitk')#+'_'+type_ref+'_'+type_dataset)
     ax.plot(wait_AP, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
     ax.plot(cat_AP, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
     
-    offset_rate = 1.25 if type_ref =='4refs' else 0.85
+    offset_rate = 1.25 if type_ref =='4refs' else 0.7
     for i in range(10):
         ax.annotate('k={}'.format(i+1), xy=(wait_AP[i]-0.04*offset_rate ,wait_bleu[i]+1.1*offset_rate), color='C0', rotation=-45, fontsize=15)
         if i > 0: ax.annotate('k={}'.format(i+1), xy=(cat_AP[i],cat_bleu[i]-0.7*offset_rate), color='C1', rotation=-45,fontsize=15)
@@ -67,6 +68,55 @@ def get_data(type_ref, type_dataset):
     fig.savefig('bleu_AP_{}_{}.pdf'.format(type_dataset, type_ref))
 
 
+    ############ plot BLEU-AL figs #############
+    #baseline_AL,base_AL_l, base_AL_r = (33.1412, 32.5, 34) if type_dataset == 'dev' else (28.7366, 28, 29.5)
+    baseline_AL,base_AL_l, base_AL_r = (33.1412, 32.15, 34) if type_dataset == 'dev' else (28.7366, 27.65, 29.5)
+    fig0 = plt.figure()
+
+    axes = fig0.add_axes([0.1, 0.15, 0.7, 0.8]) # left, bottom, width, height (range 0 to 1)
+    axes2 = fig0.add_axes([0.82, 0.15, 0.1, 0.8]) # inset axes
+    axes.margins(0.1)           # Default margin is 0.05, value 0 means fit
+    axes.plot(wait_AL, wait_bleu, 's-',color='C0', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
+    axes.plot(cat_AL, cat_bleu, 'o-', color='C1',label='catchup')#+'_'+type_ref+'_'+type_dataset)
+    axes.scatter(baseline_AL, bleu_base, c='r', marker='*', label='baseline') 
+    axes2.margins(0.1)           # Default margin is 0.05, value 0 means fit
+    axes2.plot(wait_AL, wait_bleu, 's-',color='C0', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
+    axes2.plot(cat_AL, cat_bleu, 'o-', color='C1',label='catchup')#+'_'+type_ref+'_'+type_dataset)
+    axes2.scatter(baseline_AL, bleu_base, c='r', marker='*', label='baseline') 
+    axes.set_xlim(-1.5, 11.9)  # most of the data
+    axes2.set_xlim(base_AL_l, base_AL_r)  # outliers/baseline only
+    # hide the spines between ax and ax2
+    axes.spines['right'].set_visible(False)
+    axes2.spines['left'].set_visible(False)
+    axes.yaxis.tick_left()
+    axes2.tick_params(labelleft='off')  # don't put tick labels at the left
+    axes2.yaxis.tick_right()
+
+    for i in (0,9):
+        axes.annotate('k={}'.format(i+1), xy=(wait_AL[i]-offset_rate ,wait_bleu[i]+0.25*offset_rate), color='C0', fontsize=15)
+        axes.annotate('k={}'.format(i+1), xy=(cat_AL[i],cat_bleu[i]-0.85*offset_rate), color='C1',fontsize=15)
+    from numpy import arange, cos, pi
+    d, c = .01, 1.015  # how big to make the diagonal lines in axes coordinates
+    cut_y = arange(-3*d, 9*d, d/10)
+    cut_x = d * cos(cut_y*pi/d/1.8)
+    # arguments to pass to plot, just so we don't keep repeating them
+    kwargs = dict(transform=axes.transAxes, color='k', clip_on=False)
+    axes.plot(c+cut_x, 1-cut_y, **kwargs)        # top-left diagonal
+    axes.plot(c+cut_x, cut_y, **kwargs)        # top-left diagonal
+    ''' cross mark for the broken axis
+    axes.plot((c - d, c + d), (1 - d, 1 + d), **kwargs)        # top-left diagonal
+    axes.plot((c - d, c + d), (1 + d, 1 - d), **kwargs)        # top-left diagonal
+    axes.plot((c - d, c + d), (-d, +d), **kwargs)  # bottom-left diagonal
+    axes.plot((c - d, c + d), (+d, -d), **kwargs)  # bottom-left diagonal
+    '''
+    axes.set_xlabel('Average Lagging')
+    axes.set_ylabel(ylabel)
+    #fig0.suptitle('big title')
+    axes.legend(loc=2)
+    plt.tight_layout()  # make room for the xlabel
+    fig0.savefig('bleu_AL_{}_{}.pdf'.format(type_dataset, type_ref))
+
+    '''
     fig0,ax0 = plt.subplots()
     ax0.margins(0.1)           # Default margin is 0.05, value 0 means fit
     #ax0.plot(wait_AL, wait_bleu, 's-', label='waitk')#+'_'+type_ref+'_'+type_dataset)
@@ -84,8 +134,10 @@ def get_data(type_ref, type_dataset):
     ax0.legend(loc='lower right')
     plt.tight_layout()  # make room for the xlabel
     fig0.savefig('bleu_AL_{}_{}.pdf'.format(type_dataset, type_ref))
+    '''
 
 
+    ############ plot BLEU-k figs #############
     fig2,ax2 = plt.subplots()
     ax2.plot(x, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset) 
     ax2.plot(x, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
