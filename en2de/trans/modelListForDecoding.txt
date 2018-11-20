@@ -1,0 +1,10 @@
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait1/w1_step_157000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait2/w2_step_157000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait3/w3_step_164000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait4/w4_step_182000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait5/w5_step_170000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait6/w6_step_179000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait7/w7_step_176000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait8/w8_step_187000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait9/w9_step_202000.pt
+/mnt/home/kaibo/proj/opennmt_v726_waitk/en2demodel/wait10/w10_step_209000.pt

@@ -14,18 +14,28 @@ import numpy as np
 def get_data(type_ref, type_dataset):
     file_bleu_cat = 'catchup/BLEU_0924_cat_short.txt'
     file_bleu_wait = 'waitk/BLEU_0924.txt'
+    file_bleu_rnn = 'zh2en_rnn/rnn/{}/{}2.bleu.unbpe'.format(type_dataset,type_dataset)
+
     lineNums = [12, 15, 28, 31]
     lineNum = lineNums[2* (0 if type_dataset == 'dev' else 1) + (0 if type_ref == '4refs' else 1)]
     pattern = 'BLEU = ([^,]+),'
     line = open('BLEU.md','r').readlines()[lineNum]
-    bleu_base = round(float(re.findall(pattern, line)[0]), 2)
-    bleu_base_rnn = 31.94
+    bleu_base = round(float(re.findall(pattern, line)[0]), 2)  # 22.11 on dev, 19.03 on test
+    bleu_base1 = 23.69 if type_dataset == 'dev' else 20.29 # beam11
+     
+    bleu_base_rnn = 15.51 if type_dataset == 'dev' else 15.08 # greedy
+    bleu_base_rnn1 = 16.57 if type_dataset == 'dev' else 16.40 # beam 5
     lineNum = 1 # 1 if mean, 3 if corpus ave
 
     wait_AP = list(map(float, open('waitk_{}_AP.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
     cat_AP = list(map(float, open('catchup_{}_AP.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
     wait_AL = list(map(float, open('waitk_{}_AL.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
     cat_AL = list(map(float, open('catchup_{}_AL.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
+
+    rnn_AP = list(map(float, open('zh2en_rnn/rnn/zh2en_rnn_{}_AP.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
+    rnn_AL = list(map(float, open('zh2en_rnn/rnn/zh2en_rnn_{}_AL.txt'.format(type_dataset), 'r').readlines()[lineNum].split()))
+    
+    marker_size = 120
 
     startLine = 0
     if type_dataset == 'dev':
@@ -36,7 +46,15 @@ def get_data(type_ref, type_dataset):
 
     wait_bleu = [float(re.findall(pattern, line)[0]) for line in open(file_bleu_wait,'r').readlines()[startLine: startLine+10]] 
     cat_bleu = [float(re.findall(pattern, line)[0]) for line in open(file_bleu_cat,'r').readlines()[startLine: startLine+10]] 
+    rnn_bleu = [float(re.findall(pattern, line)[0]) for line in open(file_bleu_rnn,'r').readlines()[0:10]] 
     
+    eos_apply_index = 5  # wait1..wait5 use softeos
+    if type_dataset == 'dev':
+        # zh2en+dev+catchup+threshold_0.01+detla_10, files in /mnt/home/kaibo/proj/fordecoding_catchup_softeos/decode_APALBLEU_dev_catchup_threshold0.01+detla10_softEOS.txt
+        cat_AP[:eos_apply_index] = [0.519  ,0.560  ,0.590  ,0.623  ,0.654  ,0.689  ,0.709  ,0.734  ,0.763  , 0.781][:eos_apply_index]
+        cat_AL[:eos_apply_index] = [0.168, 1.714, 2.444, 3.335, 4.360, 5.636, 6.359, 7.263, 8.570, 9.426][:eos_apply_index]
+        cat_bleu[:eos_apply_index] = [14.16, 14.79, 16.52, 17.52, 18.47, 18.53, 19.61, 20.19, 19.93,  20.27 ][:eos_apply_index]
+
     x = range(1,11)
     ylabel = '4-ref BLEU' if type_ref =='4refs' else '1-ref BLEU'
 
@@ -49,41 +67,80 @@ def get_data(type_ref, type_dataset):
 
     ############ plot BLEU-AP figs #############
     fig,ax = plt.subplots()
+    ax.grid(axis='x', linestyle='--') # vertical lines
     ax.margins(0.1)           # Default margin is 0.05, value 0 means fit
-    #ax.plot(wait_AP, wait_bleu, 's-', label='waitk')#+'_'+type_ref+'_'+type_dataset)
-    ax.plot(wait_AP, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
-    ax.plot(cat_AP, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
+    #ax.plot(wait_AP, wait_bleu, 's-', label='Transformer')#+'_'+type_ref+'_'+type_dataset)
+    #ax.plot(cat_AP, cat_bleu, 'o-', label='+catchup')#+'_'+type_ref+'_'+type_dataset)
+    ax.plot(wait_AP, wait_bleu, 's-',color='C0', label='Transformer')#+'_'+type_ref+'_'+type_dataset)
+    ax.plot(cat_AP, cat_bleu, 'o-', color='C2',label='+catchup')#+'_'+type_ref+'_'+type_dataset)
     
+
     offset_rate = 1.25 if type_ref =='4refs' else 0.7
     for i in range(10):
-        ax.annotate('k={}'.format(i+1), xy=(wait_AP[i]-0.04*offset_rate ,wait_bleu[i]+1.1*offset_rate), color='C0', rotation=-45, fontsize=15)
-        if i > 0: ax.annotate('k={}'.format(i+1), xy=(cat_AP[i],cat_bleu[i]-0.7*offset_rate), color='C1', rotation=-45,fontsize=15)
-    ax.annotate('k=1', xy=(cat_AP[0]-0.035*offset_rate,cat_bleu[0]+1.2*offset_rate), color='C1', rotation=-45,fontsize=15)
+        ax.annotate('k={}'.format(i+1), xy=(wait_AP[i]-0.08*offset_rate ,wait_bleu[i]+1.5*offset_rate), color='C0', rotation=-45, fontsize=15)
+        ax.annotate('k={}'.format(i+1), xy=(cat_AP[i],cat_bleu[i]-0.8*offset_rate), color='C2', rotation=-45,fontsize=15)
+        if i == 0:
+            ax.annotate('k={}'.format(i+1), xy=(rnn_AP[i],rnn_bleu[i]-0.5*offset_rate), color='C1', rotation=-45,fontsize=15)
+        elif i in (4,7):
+            ax.annotate('k={}'.format(i+1), xy=(rnn_AP[i]-0.01,rnn_bleu[i]-0.8*offset_rate), color='C1', rotation=-45,fontsize=15)
+        else:
+            ax.annotate('k={}'.format(i+1), xy=(rnn_AP[i],rnn_bleu[i]-0.8*offset_rate), color='C1', rotation=-45,fontsize=15)
+    #ax.annotate('k=1', xy=(cat_AP[0]-0.035*offset_rate,cat_bleu[0]+1.2*offset_rate), color='C1', rotation=-45,fontsize=15)
     #ax.hlines(bleu_base, ax.axis()[0], ax.axis()[1], 'r', linestyles='dashed', label=    'baseline')
-    ax.scatter(1, bleu_base, c='r', marker='*', label='baseline') 
+
+    ax.scatter(1, bleu_base1, marker='*', facecolors='none', edgecolors='C0', s=120)#, label='baseline') 
+    ax.scatter(1, bleu_base, marker='*', color='C0', s=120)#, label='baseline') 
+    ax.plot([1,1],[bleu_base1,bleu_base],'C0',linewidth=0.5)
+
+    ax.plot(rnn_AP, rnn_bleu,'D-', color='C1',label='RNN')
+    ax.scatter(1, bleu_base_rnn1, marker='*', facecolors='none', edgecolors='C1', s=120)#, label='baseline') 
+    ax.scatter(1, bleu_base_rnn, marker='*', color='C1', s=120)#, label='baseline') 
+    ax.plot([1,1],[bleu_base_rnn1,bleu_base_rnn],'C1',linewidth=0.5)
     ax.set_xlabel('Average Proportion')
     ax.set_ylabel(ylabel)
-    ax.legend(loc='lower right')
+    ax.legend(loc=2, prop={'size': 10})
     plt.tight_layout()  # make room for the xlabel
     fig.savefig('bleu_AP_{}_{}.pdf'.format(type_dataset, type_ref))
 
 
     ############ plot BLEU-AL figs #############
     #baseline_AL,base_AL_l, base_AL_r = (33.1412, 32.5, 34) if type_dataset == 'dev' else (28.7366, 28, 29.5)
-    baseline_AL,base_AL_l, base_AL_r = (33.1412, 32.15, 34) if type_dataset == 'dev' else (28.7366, 27.65, 29.5)
+    baseline_AL,base_AL_l, base_AL_r = (33.1412, 31.16, 34) if type_dataset == 'dev' else (28.7366, 27.76, 29.5)
     fig0 = plt.figure()
 
     axes = fig0.add_axes([0.1, 0.15, 0.7, 0.8]) # left, bottom, width, height (range 0 to 1)
     axes2 = fig0.add_axes([0.82, 0.15, 0.1, 0.8]) # inset axes
+    axes.grid(axis='x', linestyle='--') # vertical lines
+    axes2.grid(axis='x', linestyle='--') # vertical lines
+
     axes.margins(0.1)           # Default margin is 0.05, value 0 means fit
-    axes.plot(wait_AL, wait_bleu, 's-',color='C0', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
-    axes.plot(cat_AL, cat_bleu, 'o-', color='C1',label='catchup')#+'_'+type_ref+'_'+type_dataset)
-    axes.scatter(baseline_AL, bleu_base, c='r', marker='*', label='baseline') 
+    axes.plot(wait_AL, wait_bleu, 's-',color='C0', label='Transformer')#+'_'+type_ref+'_'+type_dataset)
+    axes.plot(cat_AL, cat_bleu, 'o-', color='C2',label='+catchup')#+'_'+type_ref+'_'+type_dataset)
+
+    axes.scatter(baseline_AL, bleu_base1, marker='*',facecolors='none', edgecolors='C0',s=marker_size)#, label='baseline')#, label='Transformer baseline(beam search)')
+    axes.scatter(baseline_AL, bleu_base, marker='*',facecolors='C0', edgecolors='C0',s=marker_size)#, label='baseline')#, label='Transformer baseline(greedy)')
+    axes.plot([baseline_AL,baseline_AL],[bleu_base1,bleu_base],'C0',linewidth=0.5)
+
+    axes.scatter(baseline_AL, bleu_base_rnn1, marker='*',facecolors='none', edgecolors='C1',s=marker_size)#, label='baseline')#, label='Transformer baseline(beam search)')
+    axes.scatter(baseline_AL, bleu_base_rnn, marker='*',facecolors='C1', edgecolors='C1',s=marker_size)#, label='baseline')#, label='Transformer baseline(greedy)')
+    axes.plot([baseline_AL,baseline_AL],[bleu_base_rnn1,bleu_base_rnn],'C1',linewidth=0.5)
+
+    axes.plot(rnn_AL, rnn_bleu, 'D-', color='C1',label='RNN')#+'_'+type_ref+'_'+type_dataset)
+
     axes2.margins(0.1)           # Default margin is 0.05, value 0 means fit
-    axes2.plot(wait_AL, wait_bleu, 's-',color='C0', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
-    axes2.plot(cat_AL, cat_bleu, 'o-', color='C1',label='catchup')#+'_'+type_ref+'_'+type_dataset)
-    axes2.scatter(baseline_AL, bleu_base, c='r', marker='*', label='baseline') 
-    axes.set_xlim(-1.5, 11.9)  # most of the data
+    axes2.plot(wait_AL, wait_bleu, 's-',color='C0', label='Transformer')#+'_'+type_ref+'_'+type_dataset)
+    axes2.plot(cat_AL, cat_bleu, 'o-', color='C2',label='+catchup')#+'_'+type_ref+'_'+type_dataset)
+    axes2.plot(rnn_AL, rnn_bleu, 'D-', color='C1',label='RNN')#+'_'+type_ref+'_'+type_dataset)
+
+    axes2.scatter(baseline_AL, bleu_base1, marker='*',facecolors='none', edgecolors='C0',s=marker_size)#, label='baseline')#, label='Transformer baseline(beam search)')
+    axes2.scatter(baseline_AL, bleu_base, marker='*',facecolors='C0', edgecolors='C0',s=marker_size)#, label='baseline')#, label='Transformer baseline(greedy)')
+    axes2.plot([baseline_AL,baseline_AL],[bleu_base1,bleu_base],'C0',linewidth=0.5)
+
+    axes2.scatter(baseline_AL, bleu_base_rnn1, marker='*',facecolors='none', edgecolors='C1',s=marker_size)#, label='baseline')#, label='Transformer baseline(beam search)')
+    axes2.scatter(baseline_AL, bleu_base_rnn, marker='*',facecolors='C1', edgecolors='C1',s=marker_size)#, label='baseline')#, label='Transformer baseline(greedy)')
+    axes2.plot([baseline_AL,baseline_AL],[bleu_base_rnn1,bleu_base_rnn],'C1',linewidth=0.5)
+
+    axes.set_xlim(-2, 11.9)  # most of the data
     axes2.set_xlim(base_AL_l, base_AL_r)  # outliers/baseline only
     # hide the spines between ax and ax2
     axes.spines['right'].set_visible(False)
@@ -92,9 +149,11 @@ def get_data(type_ref, type_dataset):
     axes2.tick_params(labelleft='off')  # don't put tick labels at the left
     axes2.yaxis.tick_right()
 
-    for i in (0,9):
-        axes.annotate('k={}'.format(i+1), xy=(wait_AL[i]-offset_rate ,wait_bleu[i]+0.25*offset_rate), color='C0', fontsize=15)
-        axes.annotate('k={}'.format(i+1), xy=(cat_AL[i],cat_bleu[i]-0.85*offset_rate), color='C1',fontsize=15)
+    #for i in (0,9):
+    for i in range(10):
+        axes.annotate('k={}'.format(i+1), xy=(wait_AL[i]-2*offset_rate ,wait_bleu[i]+1.7*offset_rate), color='C0', rotation=-45, fontsize=15)
+        axes.annotate('k={}'.format(i+1), xy=(cat_AL[i],cat_bleu[i]-0.8*offset_rate), color='C2',rotation=-45, fontsize=15)
+        axes.annotate('k={}'.format(i+1), xy=(rnn_AL[i],rnn_bleu[i]-0.8*offset_rate), color='C1',rotation=-45, fontsize=15)
     from numpy import arange, cos, pi
     d, c = .01, 1.015  # how big to make the diagonal lines in axes coordinates
     cut_y = arange(-3*d, 9*d, d/10)
@@ -112,7 +171,7 @@ def get_data(type_ref, type_dataset):
     axes.set_xlabel('Average Lagging')
     axes.set_ylabel(ylabel)
     #fig0.suptitle('big title')
-    axes.legend(loc=2)
+    axes.legend(loc=2, prop={'size': 10})
     plt.tight_layout()  # make room for the xlabel
     fig0.savefig('bleu_AL_{}_{}.pdf'.format(type_dataset, type_ref))
 
@@ -120,8 +179,8 @@ def get_data(type_ref, type_dataset):
     fig0,ax0 = plt.subplots()
     ax0.margins(0.1)           # Default margin is 0.05, value 0 means fit
     #ax0.plot(wait_AL, wait_bleu, 's-', label='waitk')#+'_'+type_ref+'_'+type_dataset)
-    ax0.plot(wait_AL, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset)
-    ax0.plot(cat_AL, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
+    ax0.plot(wait_AL, wait_bleu, 's-', label='Transformer')#+'_'+type_ref+'_'+type_dataset)
+    ax0.plot(cat_AL, cat_bleu, 'o-', label='+catchup')#+'_'+type_ref+'_'+type_dataset)
     
     for i in range(10):
         ax0.annotate('k={}'.format(i+1), xy=(wait_AL[i]-0.04*offset_rate ,wait_bleu[i]+1.1*offset_rate), color='C0', rotation=-45, fontsize=15)
@@ -139,8 +198,9 @@ def get_data(type_ref, type_dataset):
 
     ############ plot BLEU-k figs #############
     fig2,ax2 = plt.subplots()
-    ax2.plot(x, wait_bleu, 's-', label=r'wait-$k$')#+'_'+type_ref+'_'+type_dataset) 
-    ax2.plot(x, cat_bleu, 'o-', label='catchup')#+'_'+type_ref+'_'+type_dataset)
+    ax2.plot(x, wait_bleu, 'C0','s-', label='Transformer')#+'_'+type_ref+'_'+type_dataset) 
+    ax2.plot(x, cat_bleu, 'C2','o-', label='+catchup')#+'_'+type_ref+'_'+type_dataset)
+    ax2.plot(x, rnn_bleu, 'C1','D-', label='RNN')
     ax2.hlines(bleu_base, ax2.axis()[0], ax2.axis()[1], 'r', linestyles='dashed', label='baseline')
     #ax2.plot(x, [bleu_base]*10, '--', label='baseline'+'_'+type_ref+'_'+type_dataset)
     ax2.set_xlabel(r'$k$')
@@ -327,8 +387,8 @@ if __name__=="__main__":
     tgt_dir = 'catchup'
     plot_all(src, tgt_dir, type_dataset, type_bpe)
     '''
-    get_data('4refs', 'dev')
-    get_data('4refs', 'test')
+    #get_data('4refs', 'dev')
+    #get_data('4refs', 'test')
     get_data('ref2', 'dev')
-    get_data('ref2', 'test')
+    #get_data('ref2', 'test')
 

@@ -1,0 +1,5 @@
+en2de/data/en2de.dev.en.bpe.txt -> en2de/data/en2de.dev.de.bpe.txt
+27.616716616716616
+
+en2de/data/en2de.test.en.bpe.txt -> en2de/data/en2de.test.de.bpe.txt
+26.565237436606733

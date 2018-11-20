@@ -1,0 +1,12 @@
+THCudaCheck FAIL file=torch/csrc/cuda/Module.cpp line=32 error=35 : CUDA driver version is insufficient for CUDA runtime version
+Traceback (most recent call last):
+  File "translate_batch.py", line 36, in <module>
+    main(opt)
+  File "translate_batch.py", line 19, in main
+    translator = build_translator(opt, report_score=True)
+  File "/mnt/scratch/kaibo/proj/fordecoding/onmt/translate/translator.py", line 25, in build_translator
+    torch.cuda.set_device(opt.gpu)
+  File "/mnt/home/mam/anaconda3/lib/python3.6/site-packages/torch/cuda/__init__.py", line 262, in set_device
+    torch._C._cuda_setDevice(device)
+RuntimeError: cuda runtime error (35) : CUDA driver version is insufficient for CUDA runtime version at torch/csrc/cuda/Module.cpp:32
+PRED AVG SCORE: -0.5871, PRED PPL: 1.7987
