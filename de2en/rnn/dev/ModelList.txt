@@ -1,0 +1,10 @@
+opennmt_v618_rnn/en2demodel/wait1/w1_acc_47.24_ppl_19.09_e40.pt
+opennmt_v618_rnn/en2demodel/wait2/w2_acc_51.08_ppl_14.50_e42.pt
+opennmt_v618_rnn/en2demodel/wait3/w3_acc_53.51_ppl_12.09_e39.pt
+opennmt_v618_rnn/en2demodel/wait4/w4_acc_55.24_ppl_10.65_e38.pt
+opennmt_v618_rnn/en2demodel/wait5/w5_acc_56.50_ppl_9.64_e38.pt
+opennmt_v618_rnn/en2demodel/wait6/w6_acc_57.33_ppl_9.07_e25.pt
+opennmt_v618_rnn/en2demodel/wait7/w7_acc_57.90_ppl_8.68_e19.pt
+opennmt_v618_rnn/en2demodel/wait8/w8_acc_58.38_ppl_8.37_e23.pt
+opennmt_v618_rnn/en2demodel/wait9/w9_acc_58.54_ppl_8.21_e20.pt
+opennmt_v618_rnn/en2demodel/wait10/w10_acc_53.01_ppl_11.86_e7.pt

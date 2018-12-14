@@ -1,0 +1,8 @@
+en2de/data/en2de.dev.de.bpe.txt -> en2de/data/en2de.dev.en.bpe.txt
+29.86
+
+en2de/data/en2de.test.de.bpe.txt -> en2de/data/en2de.test.en.bpe.txt
+28.58
+
+
+# average length of source

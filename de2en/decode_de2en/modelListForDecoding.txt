@@ -1,0 +1,12 @@
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait3/w3_step_104000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait5/w5_step_104000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait1/w1_step_484000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait2/w2_step_512000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait3/w3_step_496000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait4/w4_step_476000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait5/w5_step_510000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait6/w6_step_338000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait7/w7_step_334000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait8/w8_step_356000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait9/w9_step_354000.pt
+/mnt/home/mam/proj/simul_transformer/opennmt_v726_waitk/de2enmodels/wait10/w10_step_314000.pt

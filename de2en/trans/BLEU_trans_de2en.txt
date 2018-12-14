@@ -1,0 +1,34 @@
+@iter 157k,157k,164k,182k,170k,179k,176k,187k,202k,209k,  /mnt/home/kaibo/proj/opennmt_v726_waitk/de2enmodel/wait* 
+unbpe finished for wait 1..10 for both de2en dev/test set
+----------BLEU on dev----------
+wait_1  BLEU = 15.78, 47.6/21.0/11.0/6.1 (BP=0.980, ratio=0.980, hyp_len=66256, ref_len=67616)
+wait_2  BLEU = 17.75, 52.2/24.4/13.3/7.5 (BP=0.939, ratio=0.941, hyp_len=63618, ref_len=67616)
+wait_3  BLEU = 20.14, 54.7/27.0/15.2/9.0 (BP=0.950, ratio=0.951, hyp_len=64289, ref_len=67616)
+wait_4  BLEU = 21.86, 57.5/29.5/17.2/10.4 (BP=0.931, ratio=0.933, hyp_len=63075, ref_len=67616)
+wait_5  BLEU = 23.35, 58.6/30.8/18.2/11.2 (BP=0.947, ratio=0.949, hyp_len=64138, ref_len=67616)
+wait_6  BLEU = 24.61, 60.0/32.2/19.3/12.0 (BP=0.952, ratio=0.953, hyp_len=64450, ref_len=67616)
+wait_7  BLEU = 25.34, 60.9/33.1/20.0/12.5 (BP=0.951, ratio=0.952, hyp_len=64403, ref_len=67616)
+wait_8  BLEU = 25.99, 61.6/33.8/20.6/12.9 (BP=0.952, ratio=0.953, hyp_len=64416, ref_len=67616)
+wait_9  BLEU = 26.70, 62.3/34.7/21.3/13.4 (BP=0.953, ratio=0.954, hyp_len=64495, ref_len=67616)
+wait_10  BLEU = 27.19, 62.7/35.2/21.8/13.9 (BP=0.951, ratio=0.952, hyp_len=64365, ref_len=67616)
+
+----------BLEU on test----------
+wait_1  BLEU = 16.52, 48.9/21.9/11.6/6.5 (BP=0.980, ratio=0.980, hyp_len=45889, ref_len=46818)
+wait_2  BLEU = 19.06, 53.9/26.1/14.6/8.6 (BP=0.931, ratio=0.933, hyp_len=43673, ref_len=46818)
+wait_3  BLEU = 21.39, 56.5/28.6/16.5/10.0 (BP=0.942, ratio=0.943, hyp_len=44172, ref_len=46818)
+wait_4  BLEU = 23.19, 59.1/31.1/18.4/11.4 (BP=0.930, ratio=0.933, hyp_len=43658, ref_len=46818)
+wait_5  BLEU = 24.74, 60.0/32.1/19.2/12.1 (BP=0.957, ratio=0.958, hyp_len=44841, ref_len=46818)
+wait_6  BLEU = 25.76, 61.7/33.7/20.5/13.0 (BP=0.945, ratio=0.946, hyp_len=44313, ref_len=46818)
+wait_7  BLEU = 26.63, 63.0/34.9/21.5/13.9 (BP=0.936, ratio=0.938, hyp_len=43921, ref_len=46818)
+wait_8  BLEU = 27.44, 63.4/35.5/21.9/14.2 (BP=0.949, ratio=0.950, hyp_len=44490, ref_len=46818)
+wait_9  BLEU = 28.11, 64.1/36.4/22.7/14.8 (BP=0.945, ratio=0.946, hyp_len=44299, ref_len=46818)
+wait_10  BLEU = 28.31, 64.7/36.9/23.0/15.0 (BP=0.940, ratio=0.942, hyp_len=44091, ref_len=46818)
+
+--------baseline BLEU on dev --------
+b=1  BLEU = 28.46, 64.6/36.8/23.1/14.9 (BP=0.947, ratio=0.948, hyp_len=64120, ref_len=67616)
+b=11 BLEU = 29.46, 58.2/31.6/19.5/12.4 (BP=0.986, ratio=0.986, hyp_len=62212, ref_len=63076)
+
+--------baseline BLEU on test--------
+b=1  BLEU = 29.92, 65.9/38.5/24.7/16.6 (BP=0.937, ratio=0.939, hyp_len=43972, ref_len=46818)
+b=11 BLEU = 30.44, 60.1/33.7/21.4/14.2 (BP=0.980, ratio=0.980, hyp_len=43203, ref_len=44077)
+
