@@ -26,9 +26,9 @@ wait_10  BLEU = 28.31, 64.7/36.9/23.0/15.0 (BP=0.940, ratio=0.942, hyp_len=44091
 
 --------baseline BLEU on dev --------
 b=1  BLEU = 28.46, 64.6/36.8/23.1/14.9 (BP=0.947, ratio=0.948, hyp_len=64120, ref_len=67616)
-b=11 BLEU = 29.46, 58.2/31.6/19.5/12.4 (BP=0.986, ratio=0.986, hyp_len=62212, ref_len=63076)
+b=11 
 
 --------baseline BLEU on test--------
 b=1  BLEU = 29.92, 65.9/38.5/24.7/16.6 (BP=0.937, ratio=0.939, hyp_len=43972, ref_len=46818)
-b=11 BLEU = 30.44, 60.1/33.7/21.4/14.2 (BP=0.980, ratio=0.980, hyp_len=43203, ref_len=44077)
+b=11 
 
