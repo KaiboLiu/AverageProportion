@@ -18,14 +18,14 @@ de2en/data/de2en.test.en.bpe.txt -> de2en/data/de2en.test.de.bpe.txt
 26.565237436606733
 
 
-transformer
-27 --------baseline BLEU on dev --------
- 28 b=1  BLEU = 24.23, 57.5/30.5/18.4/11.6 (BP=0.981, ratio=0.981, hyp_len=61858, ref_len=63076)
- 29 b=11 BLEU = 25.46, 58.2/31.6/19.5/12.4 (BP=0.986, ratio=0.986, hyp_len=62212, ref_len=63076)
- 30
- 31 --------baseline BLEU on test--------
- 32 b=1  BLEU = 26.63, 59.8/33.0/20.8/13.8 (BP=0.971, ratio=0.971, hyp_len=42815, ref_len=44077)
- 33 b=11 BLEU = 27.44, 60.1/33.7/21.4/14.2 (BP=0.980, ratio=0.980, hyp_len=43203, ref_len=44077)
+transformer on de2en
+--------baseline BLEU on dev --------
+b=1 BLEU = 28.46, 64.6/36.8/23.1/14.9 (BP=0.947, ratio=0.948, hyp_len=64120, ref_len=67616)
+b=9 BLEU = 29.78, 65.1/38.0/24.2/15.8 (BP=0.955, ratio=0.956, hyp_len=64626, ref_len=67616)
+--------baseline BLEU on test--------
+b=1 BLEU = 29.92, 65.9/38.5/24.7/16.6 (BP=0.937, ratio=0.939, hyp_len=43972, ref_len=46818)
+b=9 BLEU = 30.69, 66.5/39.4/25.4/17.1 (BP=0.940, ratio=0.942, hyp_len=44100, ref_len=46818)   
+
 
 '''
 
@@ -38,7 +38,7 @@ def get_data(type_ref, type_dataset):
     #round(float(re.findall(pattern, line)[0]), 2)
 
     #from rnn/BLEU_rnn_de2en.txt line 28(greedy),29(beamsearch) for dev, and line 32(greedy), 33(beamsearch) for test 
-    trans_bleu_base1, trans_bleu_base2 = (29.46, 28.46) if type_dataset=='dev' else (30.44, 29.92)  # beam search with size 11
+    trans_bleu_base1, trans_bleu_base2 = (29.78, 28.46) if type_dataset=='dev' else (30.69, 29.92)  # beam search with size 9 
     rnn_bleu_base1, rnn_bleu_base2 = (None, None) if type_dataset=='dev' else (20.82, 19.76) # 23.94 #?
     marker_size = 120
     baseline_AL,base_AL_l, base_AL_r = (27.6167166, 26.7, 28) if type_dataset == 'dev' else (28.58, 28, 29.5)
