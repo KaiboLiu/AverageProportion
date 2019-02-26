@@ -251,6 +251,6 @@ if __name__=="__main__":
         metric = sys.argv[2] if len(sys.argv) >=3 else 'AP'
         type_dataset = sys.argv[3] if len(sys.argv) == 4 else 'dev'
 
-        src = './data/en2de.{}.en.bpe.txt'.format(type_dataset)
+        src = './data/en2de.{}.de.bpe.txt'.format(type_dataset)
         tgt_dir = '{}/{}'.format(model, type_dataset)
         plot_all(src, tgt_dir, type_dataset, model=model, type_bpe=True, metric=metric)
